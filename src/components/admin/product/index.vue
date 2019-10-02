@@ -23,7 +23,7 @@
                 <th>العنوان</th>
                 <th>المباع</th>
                 <th>السعر</th>
-                <th>التخفيض</th>
+                <th>السعر المخفض</th>
                 <th>فى المخزون</th>
                 <th data-breakpoints="sm xs md">تعديل</th>
               </tr>
@@ -34,19 +34,19 @@
                 <td>
                   <img
                     :src="'/uploads/products/resized/'+product.images[product.images.length - 1]"
-                    width="48"
+                    width="48" height="48"
                     alt="Product img"
                   />
                 </td>
                 <td>
-                  <span>{{product.title.ar | truncate(30, '...')}}</span>
+                  <span>{{product.title | truncate(30, '...')}}</span>
                 </td>
                 <td>
                   <span class="text-muted">{{product.sold}}</span>
                 </td>
                 <td>{{product.price}}</td>
                 <td>{{getDiscount(product)}}</td>
-                <td>{{inStock(product)}}</td>
+                <td>{{product.inStock}}</td>
                 <td>
                   <a
                     :href="'/admin/product/edit/'+product._id"
@@ -100,10 +100,10 @@ export default {
       this.nextPage = res.data.nextPage;
     },
     getDiscount(product) {
-      const discountDate = new Date(product.discountEnd);
-      if (product.hasDiscount) {
+      const discountDate = new Date(product.discountEnds);
+      if (product.discount) {
         if (discountDate > Date.now()) {
-          return product.discountPrice;
+          return product.discount;
         } else {
           return "تاريخ التخفيض انتهى";
         }
