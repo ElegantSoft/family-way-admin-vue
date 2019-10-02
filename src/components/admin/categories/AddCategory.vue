@@ -2,17 +2,11 @@
   <div class="form-container row container" style="text-align:right">
     <div class="col-sm-12">
       <div class="form-group">
-        <label for>اسم القسم باللغة العربية</label>
-        <input type="text" class="form-control" v-model="newCategory.name.ar" />
+        <label for>اسم القسم </label>
+        <input type="text" class="form-control" v-model="newCategory.name" />
       </div>
     </div>
 
-    <div class="col-sm-12">
-      <div class="form-group">
-        <label for>اسم القسم باللغة الانجليزية</label>
-        <input type="text" class="form-control" v-model="newCategory.name.en" />
-      </div>
-    </div>
 
     <p v-if="!isChild">
       نوع القسم:
@@ -24,15 +18,15 @@
     </p>
     <div class="col-sm-12">
       <div class="form-group">
-        <label for>هل تريد ان تجعل هذا القسم فرعى لقسم رئيسى آخر</label>
-        <input type="checkbox" v-model="isChild" />
+        <label for="isParent">هل تريد ان تجعل هذا القسم فرعى لقسم رئيسى آخر</label>
+        <input type="checkbox" id="isParent" v-model="isChild" />
       </div>
     </div>
     <div class="col-sm-12">
       <div class="form-group" v-if="isChild">
         <label for>القسم الرئيسى</label>
         <select class="form-control" v-model="newCategory.parentId">
-          <option v-for="(parent,i) in parents" :key="i" :value="parent._id">{{parent.name.ar+" "+parent.name.en}}</option>
+          <option v-for="(parent,i) in parents" :key="i" :value="parent._id">{{parent.name}}</option>
         </select>
       </div>
     </div>
@@ -91,10 +85,7 @@ export default {
   data() {
     return {
       newCategory: {
-        name: {
-          ar: "",
-          en: ""
-        },
+        name: "",
         parentId: null,
         image: "placeholder.png"
       },

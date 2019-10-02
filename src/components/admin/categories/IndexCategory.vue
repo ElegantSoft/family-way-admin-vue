@@ -33,10 +33,10 @@
                   <img :src="'/uploads/cat-thumbs/resized/'+cat.image" width="48" alt="Product img" />
                 </td>
                 <td>
-                  <h5>{{cat.name.ar+' '+cat.name.en}}</h5>
+                  <h5>{{cat.name}}</h5>
                 </td>
                 <td>
-                  <span class="text-muted">{{cat.parentId ? cat.parentId.name.ar : 'قسم رئيسى'}}</span>
+                  <span class="text-muted">{{cat.parentId ? cat.parentId.name : 'قسم رئيسى'}}</span>
                 </td>
                 <td>{{cat.productCount}}</td>
                 <td>

@@ -2,17 +2,11 @@
 	<div class="form-container row container" style="text-align:right">
     <div class="col-sm-12">
       <div class="form-group">
-        <label for>اسم القسم باللغة العربية</label>
+        <label for>اسم القسم </label>
         <input type="text" class="form-control" v-model="newCategory.name.ar" />
       </div>
     </div>
 
-    <div class="col-sm-12">
-      <div class="form-group">
-        <label for>اسم القسم باللغة الانجليزية</label>
-        <input type="text" class="form-control" v-model="newCategory.name.en" />
-      </div>
-    </div>
 
     <p v-if="!isChild">
       نوع القسم:
