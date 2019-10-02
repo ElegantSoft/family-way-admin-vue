@@ -7,13 +7,8 @@
         >الطلب رقم #{{order.id}} الحالة {{renderStatus(order.status)}}</h3>
         <h5>المنتجات</h5>
         <div class="product-container" v-for="(item, i ) in order.items" :key="i">
-          <p>{{item.product.title.ar}}</p>
-          <div class="piece-container" v-if="item.pieceIndex != null">
-            <p
-              v-for="(attr, attrIndex) in item.product.pieces[item.pieceIndex].attributes"
-              :key="attrIndex"
-            >{{attr.attr_name.ar+': '+attr.attr_value.ar}}</p>
-          </div>
+          <p>{{item.product.title}}</p>
+          
           <h4>عدد القطع: x{{item.count}} االتكلفة: {{item.cost}}</h4>
         </div>
         <div class="product-container">

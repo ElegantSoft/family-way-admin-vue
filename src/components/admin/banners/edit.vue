@@ -158,10 +158,10 @@ export default {
         .then(res => (this.products = res.data.products));
     },
     handleNameCat(cat) {
-      return cat.name.ar + " " + cat.name.en;
+      return cat.name;
     },
     handleNameProduct(cat) {
-      return cat.title.ar + " " + cat.title.en;
+      return cat.title;
     },
     typeChanged(slider) {
       if (slider.refType == "product") {
@@ -233,8 +233,6 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-}
 .slider {
   border: 1px solid #e1e1e1;
   padding: 30px;

@@ -112,10 +112,10 @@ export default {
       );
     },
     handleNameCat(cat) {
-      return cat.name.ar + " " + cat.name.en;
+      return cat.name;
     },
     handleNameProduct(cat) {
-      return cat.title.ar + " " + cat.title.en;
+      return cat.title;
     },
     create() {
       Axios.post("/admin/coupon/", {
