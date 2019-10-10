@@ -4,7 +4,7 @@
       <div class="card product_item_list" style="padding:35px">
         <div class="col-sm-4">
           <div class="form-group">
-            <label style="text-align:right">عدد الطلبات</label>
+            <label style="text-align:right">عدد العناصر المعروضة</label>
             <select v-model.number="limit" class="form-control show-tick">
               <option value="5">5</option>
               <option value="20">20</option>
@@ -13,42 +13,40 @@
             </select>
           </div>
         </div>
-
+        <!-- product-table -->
         <div class="body table-responsive">
           <table class="table table-hover m-b-0">
             <thead>
               <tr>
-                <th>رقم الاوردر</th>
-                <th>الحالة</th>
-                <th>الوقت</th>
-                <th>السعر الاجمالى</th>
-                <th>عدد المنتجات</th>
-                <th>عرض</th>
+                <th>#</th>
+                <th>التوقيت</th>
+                <th data-breakpoints="sm xs md">تعديل او حذف</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(order,i) in categories" :key="i">
-                <td>{{order.id}}</td>
-                <td v-html="renderStatus(order.status)"></td>
-                <td>
-                  <span>{{order.created_at | date}}</span>
-                </td>
-                <td>
-                  <span>{{order.totalCost}}</span>
-                </td>
-                <td>{{order.items.length}}</td>
+              <tr v-for="(product,i) in products" :key="product._id">
+                <td>{{i+1}}</td>
+                <td>{{getDiscount(product)}}</td>
                 <td>
                   <a
-                    :href="'/admin/order/show/'+order._id"
+                    :href="'/admin/time/edit/'+product._id"
                     class="btn btn-default waves-effect waves-float waves-green"
                   >
-                    <i class="zmdi zmdi-eye"></i>
+                    <i class="zmdi zmdi-edit"></i>
                   </a>
+                  <button
+                    @click="remove(product,i)"
+                    type="button"
+                    class="btn btn-default waves-effect waves-float waves-red"
+                  >
+                    <i class="zmdi zmdi-delete"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+        <!-- product-table -->
         <div class="card">
           <div class="body">
             <vue-pagination
@@ -66,16 +64,15 @@
 </template>
 
 <script>
-import orderStatus from "../../../../../../config/orderStatus";
 import { bus } from "../../../main";
-import moment from "moment";
 import axios from "axios";
+
 export default {
   data() {
     return {
       page: 1,
       limit: 20,
-      categories: [],
+      products: [],
       nextPage: null,
       lastPage: 3
     };
@@ -83,43 +80,46 @@ export default {
   methods: {
     async getCategories() {
       const res = await axios({
-        url: `/admin/order/paginate?page=${this.page}&limit=${this.limit}`
+        url: `/admin/time/paginate?page=${this.page}&limit=${this.limit}`
       });
-      this.categories = res.data.data;
+      this.products = res.data.data;
       this.lastPage = res.data.lastPage;
       this.nextPage = res.data.nextPage;
     },
-    renderStatus(status) {
-      switch (status) {
-        case orderStatus.review:
-          return "بانتظار المراجعة";
-        case orderStatus.processing:
-          return "قيد التجهيز";
-        case orderStatus.shipped:
-          return "فى الشحن";
-        case orderStatus.delivered:
-          return "تم التسليم";
-        case orderStatus.reviewForReturn:
-          return " بانتظار المراجعة للارجاع";
-        case orderStatus.returned:
-          return "مرتجع";
-        case orderStatus.notReturned:
-          return "تم رفض الارجاع";
-        default:
-          return "";
+    getDiscount(product) {
+      return `من: ${this.convertTime(product.from)} الى: ${this.convertTime(
+        product.to
+      )}`;
+    },
+    convertTime(hour) {
+      if (hour === 0) {
+        return 12 + "AM";
+      } else if (hour === 12) {
+        return hour + "PM";
+      } else {
+        return hour <= 12 ? hour + "AM" : hour - 12 + "PM";
+      }
+    },
+
+    inStock(product) {
+      if (product.pieces.length) {
+        let stock = 0;
+        product.pieces.map(piece => {
+          stock += piece.inStock;
+        });
+        return stock;
+      } else {
+        return product.inStock;
       }
     },
     remove(cat, i) {
       axios({
-        url: "/admin/category/delete",
-        method: "DELETE",
-        data: {
-          id: cat._id
-        }
+        url: "/admin/time/" + cat._id,
+        method: "DELETE"
       }).then(res => {
         if (res.data.message == "deleted") {
           alert("تم مسح القسم");
-          this.$delete(this.categories, i);
+          this.$delete(this.products, i);
         }
       });
     }
@@ -157,4 +157,3 @@ export default {
   text-align: center;
 }
 </style>
-

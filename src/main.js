@@ -97,6 +97,22 @@ Vue.component(
   require("./components/admin/orders/show.vue").default
 );
 
+//time
+Vue.component(
+  "create-time",
+  require("./components/admin/time/create.vue").default
+);
+Vue.component(
+  "index-time",
+  require("./components/admin/time/index.vue").default
+);
+Vue.component(
+  "edit-time",
+  require("./components/admin/time/edit.vue").default
+);
+
+//{registerNewComponents}
+
 var filter = function(text, length, clamp) {
   clamp = clamp || "...";
   var node = document.createElement("div");
